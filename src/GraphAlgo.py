@@ -1,9 +1,12 @@
 import json
-from typing import List
+import string
+from typing import List, cast
 
 from src import GraphInterface
 from src.DiGraph import DiGraph
 from src.GraphAlgoInterface import GraphAlgoInterface
+from node_data import node_data
+import sys
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -12,11 +15,19 @@ class GraphAlgo(GraphAlgoInterface):
         self.__DiGraph = DiGraph.__init__()
 
     def get_graph(self) -> GraphInterface:
-        super().get_graph()
+        return self.__DiGraph
 
     def load_from_json(self, file_name: str) -> bool:
-        f = open(file_name)
+        f = open("G1.json")
         data = json.load(f)
+        for i in data["Nodes"]:
+            s = (i["pos"])
+            s: cast(string, s)  # casing to string
+            t = s.split(',')  # spliting to nodes
+            tuplePos = (t[0], t[1], t[2])
+            self.__DiGraph.add_node(i["id"], tuplePos)
+        for i in data["Edges"]:
+            self.__DiGraph.add_edge(i["src"], i["dest"], i["w"])
 
         pass
 
@@ -27,17 +38,51 @@ class GraphAlgo(GraphAlgoInterface):
         pass
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        super().TSP(node_lst)
+        if (node_lst.__sizeof__() == 0):
+            return None
+        ans: List[int] = []
+        idxToDelete = 0
+        here = node_lst[0]
+        node_lst.remove(node_lst[0])
+        while node_lst.__sizeof__() > 0:
+            min = sys.float_info.max
+            routes = self.johnson()[here]#need to ask almog
+            for i in node_lst:
+                if (routes[node_lst[i]] < min):
+                    min = routes[node_lst[i]]
+                    idxToDelete = i
+            path = self.shortest_path(here, node_lst[idxToDelete])
+            ans.__add__(path)
+            del ans[-1]
+            here = node_lst[idxToDelete]
+            node_lst.remove(node_lst[idxToDelete])
+
+        ans.__add__(here)
+        return ans
 
     def centerPoint(self) -> (int, float):
-        super().centerPoint()
+        ans = node_data(None)
+        min = sys.float_info.max
+        nodes = self.__DiGraph.get_all_v()
+        for key in nodes:
+            max = 0
+            srcNode = nodes[key]
+            routes = self.johnson()[key]  # need to wait for almog
+            for key1 in routes:
+                if (routes[key1] == -1):
+                    return None;
+                if (routes[key1] > max):
+                    max = routes[key1]
+            if (max < min):
+                min = max
+                ans = srcNode
+        return ans.get_key(), min;
 
     def plot_graph(self) -> None:
         pass
 
-
     # almog place
-    def johnson(self):
+    def johnson(self)-> (dict):
         """Return distance where distance[u][v] is the min distance from u to v.
 
         distance[u][v] is the shortest distance from vertex u to v.
@@ -51,7 +96,7 @@ class GraphAlgo(GraphAlgoInterface):
             self.add_edge('q', v.get_key(), 0)
 
         # compute shortest distance from vertex q to all other vertices
-        bell_dist = bellman_ford(self, self.get_vertex('q'))
+        bell_dist = self.bellman_ford(self, self.get_vertex('q'))
 
         # set weight(u, v) = weight(u, v) + bell_dist(u) - bell_dist(v) for each
         # edge (u, v)
@@ -64,7 +109,6 @@ class GraphAlgo(GraphAlgoInterface):
         # This implementation of the graph stores edge (u, v) in Vertex object u
         # Since no other vertex points back to q, we do not need to worry about
         # removing edges pointing to q from other vertices.
-
 
         # distance[u][v] will hold smallest distance from vertex u to v
         distance = {}

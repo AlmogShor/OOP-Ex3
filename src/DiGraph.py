@@ -7,8 +7,8 @@ class DiGraph(GraphInterface):
 
     def __init__(self):
         self.__nodes = {}
-        self.__in_edges = {{}}
-        self.__out_edges = {{}}
+        self.__in_edges = { }
+        self.__out_edges = { }
         self.__MC = 0
 
     def v_size(self) -> int:
