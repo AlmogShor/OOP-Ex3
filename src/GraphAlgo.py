@@ -14,7 +14,7 @@ class GraphAlgo(GraphAlgoInterface):
     def __init__(self):
         self.__DiGraph = DiGraph.__init__()
 
-    def __int__(self, g: DiGraph):
+    def __init__(self, g: DiGraph):
         self.__DiGraph = g
 
     def get_graph(self) -> GraphInterface:
