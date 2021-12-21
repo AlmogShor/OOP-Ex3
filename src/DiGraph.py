@@ -1,6 +1,6 @@
-from src.GraphInterface import GraphInterface
-from src.node_data import node_data as node
-from src.edge_data import edge_data as edge
+from GraphInterface import GraphInterface
+from node_data import node_data as node
+from edge_data import edge_data as edge
 
 
 class DiGraph(GraphInterface):
@@ -12,12 +12,12 @@ class DiGraph(GraphInterface):
         self.__MC = 0
 
     def v_size(self) -> int:
-        return self.__nodes.__sizeof__()
+        return len(self.__nodes)
 
     def e_size(self) -> int:
         count = 0
-        for i in self.__out_edges:
-            count += i.__sizeof__()
+        for i in self.__out_edges.values():
+            count += len(i)
         return count
 
     def get_all_v(self) -> dict:

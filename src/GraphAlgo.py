@@ -2,43 +2,57 @@ import json
 import string
 from typing import List, cast
 
-from src import GraphInterface
-from src.DiGraph import DiGraph
-from src.GraphAlgoInterface import GraphAlgoInterface
+from DiGraph import DiGraph
+from GraphAlgoInterface import GraphAlgoInterface
 from node_data import node_data
 import sys
+from GraphInterface import GraphInterface
 
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self):
-        self.__DiGraph = DiGraph.__init__()
-
-    def __init__(self, g: DiGraph):
-        self.__DiGraph = g
+    def __init__(self, g: DiGraph = None):
+        if g is None:
+            self.__DiGraph = DiGraph()
+        else:
+            self.__DiGraph = g
 
     def get_graph(self) -> GraphInterface:
         return self.__DiGraph
 
     def load_from_json(self, file_name: str) -> bool:
         try:
-            f = open("A0.json")
+            f = open("C:\\Users\\Sabrina\\PycharmProjects\\OOP-Ex3\\src\\A1.json")
             data = json.load(f)
-            self.__DiGraph = DiGraph.__init__()
             for i in data["Nodes"]:
                 s = (i["pos"])
                 s: cast(string, s)  # casing to string
                 t = s.split(',')  # spliting to nodes
-                tuplePos = (t[0], t[1], t[2])
+                tuplePos = (float(t[0]), float(t[1]), float(t[2]))
                 self.__DiGraph.add_node(i["id"], tuplePos)
             for i in data["Edges"]:
                 self.__DiGraph.add_edge(i["src"], i["dest"], i["w"])
+            f.close()
             return True
         except Exception:
             return False
 
     def save_to_json(self, file_name: str) -> bool:
-        pass
+        dictEdge = {'Edges'}
+        dictEdge['Edges'] = {}
+        dict= dictEdge['Edges']
+        for i in self.__DiGraph.get_all_v().keys():
+            x= self.__DiGraph.get_all_v(i)
+            dict.update(x)
+
+
+
+        b = self.__DiGraph.get_all_v()
+        b = self.__DiGraph.all_in_edges_of_node(1)
+        c = json.dumps(dict, indent=2)
+        with open('data.json', 'w') as fp:
+            fp.write(c)
+        # a_file = json.dump(self.__DiGraph., a_file)
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         pass
@@ -52,7 +66,7 @@ class GraphAlgo(GraphAlgoInterface):
         node_lst.remove(node_lst[0])
         while node_lst.__sizeof__() > 0:
             min = sys.float_info.max
-            routes = self.johnson()[here]#need to ask almog
+            routes = self.johnson()[here]  # need to ask almog
             for i in node_lst:
                 if (routes[node_lst[i]] < min):
                     min = routes[node_lst[i]]
@@ -88,7 +102,7 @@ class GraphAlgo(GraphAlgoInterface):
         pass
 
     # almog place
-    def johnson(self)-> (dict):
+    def johnson(self) -> (dict):
         """Return distance where distance[u][v] is the min distance from u to v.
 
         distance[u][v] is the shortest distance from vertex u to v.
