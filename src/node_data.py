@@ -40,4 +40,5 @@ class node_data:
             return False
         other = node_data(ot)
         return self.get_key() == other.get_key() and self.get_weight() == other.get_weight() and self.point.equals(
-            other.get_location()) and self.tag == other.get_tag() and self.get_info().equals(other.get_info());
+            other.get_location()) and self.tag == other.get_tag() and self.get_info().equals(other.get_info())
+
