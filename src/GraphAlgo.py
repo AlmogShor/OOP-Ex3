@@ -40,12 +40,10 @@ class GraphAlgo(GraphAlgoInterface):
     def save_to_json(self, file_name: str) -> bool:
         dictEdge = {'Edges'}
         dictEdge['Edges'] = {}
-        dict= dictEdge['Edges']
+        dict = dictEdge['Edges']
         for i in self.__DiGraph.get_all_v().keys():
-            x= self.__DiGraph.get_all_v(i)
+            x = self.__DiGraph.get_all_v(i)
             dict.update(x)
-
-
 
         b = self.__DiGraph.get_all_v()
         b = self.__DiGraph.all_in_edges_of_node(1)
@@ -55,10 +53,11 @@ class GraphAlgo(GraphAlgoInterface):
         # a_file = json.dump(self.__DiGraph., a_file)
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        pass
+        prev_nodes, curr_shortest_path = self.dijkstra_algorithm(id1)
+
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        if (node_lst.__sizeof__() == 0):
+        if node_lst.__sizeof__() == 0:
             return None
         ans: List[int] = []
         idxToDelete = 0
@@ -66,9 +65,9 @@ class GraphAlgo(GraphAlgoInterface):
         node_lst.remove(node_lst[0])
         while node_lst.__sizeof__() > 0:
             min = sys.float_info.max
-            routes = self.johnson()[here]  # need to ask almog
+            routes = self.dijkstra_algorithm(here)  # need to ask almog
             for i in node_lst:
-                if (routes[node_lst[i]] < min):
+                if routes[node_lst[i]] < min:
                     min = routes[node_lst[i]]
                     idxToDelete = i
             path = self.shortest_path(here, node_lst[idxToDelete])
@@ -87,110 +86,59 @@ class GraphAlgo(GraphAlgoInterface):
         for key in nodes:
             max = 0
             srcNode = nodes[key]
-            routes = self.johnson()[key]  # need to wait for almog
+            routes = self.dijkstra_algorithm([key])  # need to wait for almog
             for key1 in routes:
-                if (routes[key1] == -1):
-                    return None;
-                if (routes[key1] > max):
+                if routes[key1] == -1:
+                    return None
+                if routes[key1] > max:
                     max = routes[key1]
-            if (max < min):
+            if max < min:
                 min = max
                 ans = srcNode
-        return ans.get_key(), min;
+        return ans.get_key(), min
 
     def plot_graph(self) -> None:
         pass
 
-    # almog place
-    def johnson(self) -> (dict):
-        """Return distance where distance[u][v] is the min distance from u to v.
+    # Almog place
 
-        distance[u][v] is the shortest distance from vertex u to v.
+    def dijkstra_algorithm(self, start_node):
 
-        self is a Graph object which can have negative edge weights.
-        """
-        # add new vertex q
-        self.__DiGraph.add_node()
-        # let q point to all other vertices in self with zero-weight edges
-        for v in self.__DiGraph.get_all_v:
-            self.add_edge('q', v.get_key(), 0)
+        unvisited_nodes = list(self.__DiGraph.get_all_v())
 
-        # compute shortest distance from vertex q to all other vertices
-        bell_dist = self.bellman_ford(self, self.get_vertex('q'))
+        # We'll use this dict to save the cost of visiting each node and update it as we move along the graph
+        shortest_path = {}
 
-        # set weight(u, v) = weight(u, v) + bell_dist(u) - bell_dist(v) for each
-        # edge (u, v)
-        for v in self:
-            for n in v.get_neighbours():
-                w = v.get_weight(n)
-                v.set_weight(n, w + bell_dist[v] - bell_dist[n])
+        # We'll use this dict to save the shortest known path to a node found so far
+        previous_nodes = {}
 
-        # remove vertex q
-        # This implementation of the graph stores edge (u, v) in Vertex object u
-        # Since no other vertex points back to q, we do not need to worry about
-        # removing edges pointing to q from other vertices.
+        # We'll use max_value to initialize the "infinity" value of the unvisited nodes
+        max_value = sys.maxsize
+        for node in unvisited_nodes:
+            shortest_path[node] = max_value
+        # However, we initialize the starting node's value with 0
+        shortest_path[start_node] = 0
 
-        # distance[u][v] will hold smallest distance from vertex u to v
-        distance = {}
-        # run dijkstra's algorithm on each source vertex
-        for v in self.__DiGraph.get_all_v():
-            distance[v] = self.dijkstra(self, v)
+        # The algorithm executes until we visit all nodes
+        while unvisited_nodes:
+            # The code block below finds the node with the lowest score
+            current_min_node = None
+            for node in unvisited_nodes:  # Iterate over the nodes
+                if current_min_node is None:
+                    current_min_node = node
+                elif shortest_path[node] < shortest_path[current_min_node]:
+                    current_min_node = node
 
-        # correct distances
-        for v in self.__DiGraph.get_all_v():
-            for w in self.__DiGraph.get:
-                distance[v][w] += bell_dist[w] - bell_dist[v]
+            # The code block below retrieves the current node's neighbors and updates their distances
+            neighbors = self.__DiGraph.all_out_edges_of_node(current_min_node)
+            for neighbor in neighbors:
+                tentative_value = shortest_path[current_min_node] + self.__DiGraph.distance(current_min_node, neighbor)
+                if tentative_value < shortest_path[neighbor]:
+                    shortest_path[neighbor] = tentative_value
+                    # We also update the best path to the current node
+                    previous_nodes[neighbor] = current_min_node
 
-        # correct weights in original graph
-        for v in self.__DiGraph.get_all_v():
-            for n in v.get_neighbours():
-                w = v.get_weight(n)
-                v.set_weight(n, w + bell_dist[n] - bell_dist[v])
+                    # After visiting its neighbors, we mark the node as "visited"
+            unvisited_nodes.remove(current_min_node)
 
-        return distance
-
-    def bellman_ford(self, source):
-        """Return distance where distance[v] is min distance from source to v.
-
-        This will return a dictionary distance.
-
-        self is a Graph object which can have negative edge weights.
-        source is a Vertex object in self.
-        """
-        distance = dict.fromkeys(self, float('inf'))
-        distance[source] = 0
-
-        for _ in range(len(self) - 1):
-            for v in self.__DiGraph.get_all_v():
-                for n in v.get_neighbours():
-                    distance[n] = min(distance[n], distance[v] + v.get_weight(n))
-
-        return distance
-
-    def dijkstra(self, source):
-        """Return distance where distance[v] is min distance from source to v.
-
-        This will return a dictionary distance.
-
-        self is a Graph object.
-        source is a Vertex object in self.
-        """
-        unvisited = set(self)
-        distance = dict.fromkeys(self, float('inf'))
-        distance[source] = 0
-
-        while unvisited != set():
-            # find vertex with minimum distance
-            closest = min(unvisited, key=lambda v: distance[v])
-
-            # mark as visited
-            unvisited.remove(closest)
-
-            # update distances
-            for neighbour in closest.get_neighbours():
-                if neighbour in unvisited:
-                    new_distance = distance[closest] + closest.get_weight(neighbour)
-                    if distance[neighbour] > new_distance:
-                        distance[neighbour] = new_distance
-
-        return distance
+        return previous_nodes, shortest_path

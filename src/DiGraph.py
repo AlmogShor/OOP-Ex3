@@ -71,3 +71,9 @@ class DiGraph(GraphInterface):
         self.__in_edges[node_id2].pop(node_id1)
         self.__MC += 1
         return True
+
+    def distance(self, current_min_node, neighbor):
+        tmp = self.__in_edges[current_min_node][neighbor]
+        #tmp.get_weight
+        #return tmp
+        return None

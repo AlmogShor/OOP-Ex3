@@ -2,7 +2,6 @@ class node_data:
     def __init__(self, key, loc):
         self.__key = key
         self.__point = loc
-        self.__weight = 0.0
         self.__info = ""
         self.__tag = -1
 
