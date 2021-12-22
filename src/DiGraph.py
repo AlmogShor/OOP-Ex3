@@ -1,6 +1,5 @@
 from GraphInterface import GraphInterface
 from node_data import node_data as node
-from edge_data import edge_data as edge
 
 
 class DiGraph(GraphInterface):
@@ -85,7 +84,7 @@ class DiGraph(GraphInterface):
         return True
 
     def distance(self, current_min_node, neighbor):
-        tmp = self.__in_edges[current_min_node][neighbor]
-        #tmp.get_weight
-        #return tmp
+        # tmp = self.__in_edges[current_min_node][neighbor]
+        # #tmp.get_weight
+        # #return tmp
         return None
