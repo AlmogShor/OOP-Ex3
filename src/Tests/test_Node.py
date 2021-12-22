@@ -1,8 +1,9 @@
 import unittest
 import sys
+sys.path.append('C:\\Users\\barak\\PycharmProjects\\OOP-Ex3\\src')
 from src.node_data import node_data
 
-sys.path.append('C:\\Users\\Sabrina\\PycharmProjects\\OOP-Ex3\\src')
+
 
 
 class MyTestCase(unittest.TestCase):

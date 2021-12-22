@@ -22,7 +22,8 @@ class GraphAlgo(GraphAlgoInterface):
 
     def load_from_json(self, file_name: str) -> bool:
         try:
-            f = open("C:\\Users\\Sabrina\\PycharmProjects\\OOP-Ex3\\src\\A1.json")
+            f = open(file_name)
+            self.get_graph().__init__()
             data = json.load(f)
             for i in data["Nodes"]:
                 s = (i["pos"])
@@ -38,19 +39,24 @@ class GraphAlgo(GraphAlgoInterface):
             return False
 
     def save_to_json(self, file_name: str) -> bool:
-        dictEdge = {'Edges'}
-        dictEdge['Edges'] = {}
-        dict = dictEdge['Edges']
-        for i in self.__DiGraph.get_all_v().keys():
-            x = self.__DiGraph.get_all_v(i)
-            dict.update(x)
-
-        b = self.__DiGraph.get_all_v()
-        b = self.__DiGraph.all_in_edges_of_node(1)
-        c = json.dumps(dict, indent=2)
-        with open('data.json', 'w') as fp:
-            fp.write(c)
-        # a_file = json.dump(self.__DiGraph., a_file)
+        data = {'Edges': [], 'Nodes': []}
+        # data['Edges'] = []
+        # data['Nodes'] = []
+        for node in self.get_graph().get_all_v().values():
+            loc = node.get_location()
+            data['Nodes'].append({
+                'pos': ','.join(map(str, loc)),
+                'id': node.get_key()
+            })
+            edgeDict = self.get_graph().all_out_edges_of_node(node.get_key())
+            for dest in edgeDict.keys():
+                data['Edges'].append({
+                    'src': node.get_key(),
+                    'w': edgeDict[dest],
+                    'dest': dest
+                })
+        with open('data.txt', 'w') as outfile:
+            json.dump(data, outfile, indent=2)
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         prev_nodes, curr_shortest_path = self.dijkstra_algorithm(id1)
