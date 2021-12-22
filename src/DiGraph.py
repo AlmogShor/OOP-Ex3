@@ -56,6 +56,18 @@ class DiGraph(GraphInterface):
     def remove_node(self, node_id: int) -> bool:
         if self.__nodes.get(node_id) is None:
             return False
+        if self.all_out_edges_of_node(node_id) is not None:
+            for out in self.all_out_edges_of_node(node_id).keys():
+                self.__in_edges.get(out).pop(node_id)
+                if len(self.__in_edges.get(out)) == 0:
+                    self.__in_edges.pop(out)
+            self.__out_edges.pop(node_id)
+        if self.all_in_edges_of_node(node_id) is not None:
+            for toMe in self.all_in_edges_of_node(node_id).keys():
+                self.__out_edges.get(toMe).pop(node_id)
+                if len(self.__out_edges.get(toMe)) == 0:
+                    self.__out_edges.pop(toMe)
+            self.__in_edges.pop(node_id)
         self.__nodes.pop(node_id)
         self.__MC += 1
         return True
