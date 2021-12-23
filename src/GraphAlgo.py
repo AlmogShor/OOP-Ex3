@@ -111,15 +111,13 @@ class GraphAlgo(GraphAlgoInterface):
         plt.plot(x, y, 'ro')
         for i in range(len(x)):
             plt.annotate(i, xy=(x[i]*0.999991, y[i]*1.000005))
-        x = []
-        y = []
         for node_id in self.get_graph().get_all_v().keys():
             for edge in self.get_graph().all_out_edges_of_node(node_id).keys():
                 dest_x = self.get_graph().get_all_v().get(edge).get_location()[0]
                 dest_y = self.get_graph().get_all_v().get(edge).get_location()[1]
                 src_x = self.get_graph().get_all_v().get(node_id).get_location()[0]
                 src_y = self.get_graph().get_all_v().get(node_id).get_location()[1]
-                plt.arrow(src_x, src_y, (dest_x-src_x)*0.85, (dest_y-src_y)*0.85, width=0.00007)
+                plt.annotate("", xy=(src_x, src_y), xytext=(dest_x, dest_y), arrowprops={'arrowstyle': "<-", 'lw': 2})
         plt.show()
 
     def dijkstra_algorithm(self, start_node):
