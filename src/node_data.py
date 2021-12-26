@@ -20,3 +20,6 @@ class node_data:
         other = node_data(ot.get_key(), ot.get_location())
         return (self.get_key() == other.get_key() and self.get_location() == other.get_location()
                 and self.get_tag() == other.get_tag() and self.get_info() == other.get_info())
+
+    def __str__(self):
+        return "id: " + str(self.get_key()) + "location: " + self.get_location()

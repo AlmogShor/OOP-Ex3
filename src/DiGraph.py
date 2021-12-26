@@ -45,7 +45,7 @@ class DiGraph(GraphInterface):
             return True
         return False
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool:
+    def add_node(self, node_id: int, pos: tuple = (0.0, 0.0, 0.0)) -> bool:
         if self.__nodes.get(node_id) is not None:
             return False
         self.__nodes[node_id] = node(node_id, pos)
@@ -92,3 +92,6 @@ class DiGraph(GraphInterface):
         # #tmp.get_weight
         # #return tmp
         return None
+
+    def __str__(self):
+        return "Graph: |V|=" + str(self.v_size()) + ", |E|=" + str(self.e_size())
