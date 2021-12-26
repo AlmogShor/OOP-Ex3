@@ -23,3 +23,6 @@ class node_data:
 
     def __str__(self):
         return "id: " + str(self.get_key()) + "location: " + self.get_location()
+
+    def __repr__(self):
+        return "id: " + str(self.get_key()) + "location: " + str(self.get_location())

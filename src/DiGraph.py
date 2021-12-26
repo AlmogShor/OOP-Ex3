@@ -87,11 +87,5 @@ class DiGraph(GraphInterface):
         self.__MC += 1
         return True
 
-    def distance(self, current_min_node, neighbor):
-        # tmp = self.__in_edges[current_min_node][neighbor]
-        # #tmp.get_weight
-        # #return tmp
-        return None
-
     def __str__(self):
         return "Graph: |V|=" + str(self.v_size()) + ", |E|=" + str(self.e_size())
