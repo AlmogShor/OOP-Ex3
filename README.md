@@ -9,5 +9,7 @@ About this project - p.2
 Analysis algorithms - p.3  
 Dependencies - p.4  
 Implementation - p.5  
-UML -p.6   
+UML - p.6   
 How to run our project - p.7  
+
+how to run our project (in short):   
