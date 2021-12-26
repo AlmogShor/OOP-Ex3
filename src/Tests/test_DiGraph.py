@@ -1,12 +1,10 @@
 import unittest
 import sys
-sys.path.append('C:\\Users\\barak\\PycharmProjects\\OOP-Ex3\\src')
+sys.path.append('..')
 
 from src.node_data import node_data
 from src.DiGraph import DiGraph
 from src.GraphInterface import GraphInterface
-
-sys.path.append('OOP-Ex3\\src')
 
 
 class MyTestCase(unittest.TestCase):

@@ -42,6 +42,8 @@ class DiGraph(GraphInterface):
             self.__out_edges[id1][id2] = weight
             self.__in_edges[id2][id1] = weight
             self.__MC += 1
+            self.__nodes.get(id1).out_count += 1
+            self.__nodes.get(id2).in_count += 1
             return True
         return False
 
@@ -55,18 +57,26 @@ class DiGraph(GraphInterface):
     def remove_node(self, node_id: int) -> bool:
         if self.__nodes.get(node_id) is None:
             return False
+
+        # remove from in V the out E That go to deleted node
         if self.all_out_edges_of_node(node_id) is not None:
             for out in self.all_out_edges_of_node(node_id).keys():
+                self.__nodes.get(out).in_count -= 1
                 self.__in_edges.get(out).pop(node_id)
                 if len(self.__in_edges.get(out)) == 0:
                     self.__in_edges.pop(out)
             self.__out_edges.pop(node_id)
+
+        #
         if self.all_in_edges_of_node(node_id) is not None:
             for toMe in self.all_in_edges_of_node(node_id).keys():
                 self.__out_edges.get(toMe).pop(node_id)
+                self.__nodes.get(toMe).out_count -= 1
                 if len(self.__out_edges.get(toMe)) == 0:
                     self.__out_edges.pop(toMe)
             self.__in_edges.pop(node_id)
+
+
         self.__nodes.pop(node_id)
         self.__MC += 1
         return True
@@ -79,9 +89,11 @@ class DiGraph(GraphInterface):
         if self.__out_edges[node_id1].get(node_id2) is None:
             return False
         self.__out_edges[node_id1].pop(node_id2)
+        self.__nodes.get(node_id1).out_count -= 1
         if len(self.__out_edges.get(node_id1)) == 0:
             self.__out_edges.pop(node_id1)
         self.__in_edges[node_id2].pop(node_id1)
+        self.__nodes.get(node_id2).in_count -= 1
         if len(self.__in_edges.get(node_id2)) == 0:
             self.__in_edges.pop(node_id2)
         self.__MC += 1

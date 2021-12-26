@@ -31,7 +31,7 @@ class GraphAlgo(GraphAlgoInterface):
             self.get_graph().__init__()
             data = json.load(f)
             for i in data["Nodes"]:
-                if "pos" in data["Nodes"]:
+                if "pos" in i:
                     s = (i["pos"])
                     s: cast(string, s)  # casing to string
                     t = s.split(',')  # spliting to nodes
@@ -148,19 +148,24 @@ class GraphAlgo(GraphAlgoInterface):
         plt.show()
 
     def dijkstra_algorithm(self, start_node):
-        weight = list(self.__DiGraph.get_all_v())
-        prev_nodes = list(self.__DiGraph.get_all_v())
+        weight = list()
+        prev_nodes = list()
+        i = 0
+        for node in self.get_graph().get_all_v().values():
+            while i < node.get_key():
+                weight.append(float('inf'))
+                prev_nodes.append(-1)
+                i += 1
+            weight.append(float('inf'))
+            prev_nodes.append(-1)
+            i += 1
         queue = PriorityQueue()
-        for node in weight:
-            weight[node] = float('inf')
         weight[start_node] = 0
-        for p in prev_nodes:
-            prev_nodes[p] = -1
         queue.put(start_node, 0)
         while not queue.empty():
             node = queue.get()
             edges = self.__DiGraph.all_out_edges_of_node(node)
-            if edges != None:
+            if edges is not None:
                 for edge in edges.keys():
                     if weight[node] + edges.get(edge) < weight[edge]:
                         weight[edge] = weight[node] + edges.get(edge)
