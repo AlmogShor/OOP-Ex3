@@ -12,4 +12,17 @@ Implementation - p.5
 UML - p.6   
 How to run our project - p.7  
 
-how to run our project (in short):   
+#### how to run our project (in short):   
+
+Please make sure you have our dependencies:
+```bash
+pip install -r requirements.txt
+```
+How to run our algorithm from the CMD:
+'''cmd
+cd src
+python main.py
+'''
+
+You can also run manually our tests for our algorithm and function in the Tests folder
+
