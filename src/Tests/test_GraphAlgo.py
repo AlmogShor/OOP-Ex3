@@ -65,10 +65,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_load_from_json(self):
         Graph = GraphAlgo()
-        #Graph.load_from_json("../data/100000.json")
-        #Graph.save_to_json("../data/100000.json")
+        Graph.load_from_json("../data/10000.json")
+        Graph.save_to_json("../data/10000.json")
         #print(Graph.shortest_path(3, 125))
-        #print(Graph.centerPoint())
+        print(Graph.centerPoint())
         #print(Graph.TSP([2,5,8,65,23,77,44,656,22,5422,3333,7890,9999,1213]))
         # Graph.plot_graph()
         # g = Graph.get_graph().v_size()
