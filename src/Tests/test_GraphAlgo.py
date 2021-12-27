@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-sys.path.append('C:\\Users\\barak\\PycharmProjects\\OOP-Ex3\\src')
+sys.path.append('C:\\Users\\Sabrina\\PycharmProjects\\OOP-Ex3\\src')
 
 from src.DiGraph import DiGraph
 from src.GraphAlgo import GraphAlgo
@@ -65,7 +65,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_load_from_json(self):
         Graph = GraphAlgo()
-        Graph.load_from_json("C:\\Users\\barak\\PycharmProjects\\OOP-Ex3\\src\\A1.json")
+        Graph.load_from_json("C:\\Users\\Sabrina\\PycharmProjects\\OOP-Ex3\\src\\A1.json")
         g = Graph.get_graph().v_size()
         self.assertEqual(17, g)  # add assertion here
         g = Graph.get_graph().e_size()
@@ -88,12 +88,20 @@ class MyTestCase(unittest.TestCase):
         g = self.generate()
         gr = GraphAlgo(g)
         route = gr.shortest_path(2,4)
-        self.assertEqual(route[0].get(4),1.5)
+        self.assertEqual(route[0],1.5)
+        path=[2,3,4]
+        self.assertEqual(path,route[1])
         route1 = gr.shortest_path(0, 2)
-        self.assertEqual(route1[0].get(2), 7.8)
+        self.assertEqual(route1[0], 7.8)
         route2 = gr.shortest_path(2, 6)
-        self.assertAlmostEqual(route2[0].get(6),12.9)
-
+        self.assertAlmostEqual(route2[0],12.9)
+        gr.get_graph().remove_edge(5,0)
+        route = gr.shortest_path(2,1)
+        path=[2,3,4,5,6,7,8,9,1]
+        self.assertEqual(path, route[1])
+        route = gr.shortest_path(0, 8)
+        path = [0,8]
+        self.assertEqual(path, route[1])
 
     def test_centerPoint(self):
         g = DiGraph()
