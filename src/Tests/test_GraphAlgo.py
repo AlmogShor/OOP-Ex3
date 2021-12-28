@@ -34,34 +34,35 @@ class MyTestCase(unittest.TestCase):
         g.add_edge(0, 2, 20)
         g.add_edge(0, 3, 8.2)
         g.add_edge(0, 4, 5.2)
-        g.add_edge(0,5,4.9)
-        g.add_edge(0,6,2.3)
-        g.add_edge(0,7,1.3)
-        g.add_edge(0,8,0.4)
-        g.add_edge(0,9,1.25)
-        g.add_edge(9,1,4.2)
-        g.add_edge(1,2,6.3)
-        g.add_edge(2,3,1.2)
-        g.add_edge(3,4,0.3)
-        g.add_edge(4,5,5.3)
-        g.add_edge(5,6,6.1)
-        g.add_edge(6,7,4.3)
-        g.add_edge(7,8,3.9)
-        g.add_edge(8,9,9.2)
+        g.add_edge(0, 5, 4.9)
+        g.add_edge(0, 6, 2.3)
+        g.add_edge(0, 7, 1.3)
+        g.add_edge(0, 8, 0.4)
+        g.add_edge(0, 9, 1.25)
+        g.add_edge(9, 1, 4.2)
+        g.add_edge(1, 2, 6.3)
+        g.add_edge(2, 3, 1.2)
+        g.add_edge(3, 4, 0.3)
+        g.add_edge(4, 5, 5.3)
+        g.add_edge(5, 6, 6.1)
+        g.add_edge(6, 7, 4.3)
+        g.add_edge(7, 8, 3.9)
+        g.add_edge(8, 9, 9.2)
         g.add_edge(5, 0, 10)
         return g
+
     def test_get_graph(self):
         g = DiGraph()
         g = self.generate()
         gr = GraphAlgo(g)
         gl = GraphAlgo(g)
-        grE= gr.get_graph().get_all_v()
+        grE = gr.get_graph().get_all_v()
         gE = gl.get_graph().get_all_v()
         for i in grE.keys():
             self.assertEqual(gE.get(i).get_key(), grE.get(i).get_key())
             self.assertEqual(gE.get(i).get_location(), grE.get(i).get_location())
 
-        #Graph.save_to_json("a")
+        # Graph.save_to_json("a")
 
     def test_load_from_json(self):
         Graph = GraphAlgo()
@@ -75,7 +76,7 @@ class MyTestCase(unittest.TestCase):
         Graph = GraphAlgo()
         Graph.load_from_json("C:\\Users\\barak\\PycharmProjects\\OOP-Ex3\\src\\A1.json")
         Graph.save_to_json('data.json')
-        g= GraphAlgo()
+        g = GraphAlgo()
         g.load_from_json('data.json')
         grE = g.get_graph().get_all_v()
         gE = Graph.get_graph().get_all_v()
@@ -87,13 +88,12 @@ class MyTestCase(unittest.TestCase):
         g = DiGraph()
         g = self.generate()
         gr = GraphAlgo(g)
-        route = gr.shortest_path(2,4)
-        self.assertEqual(route[0].get(4),1.5)
+        route = gr.shortest_path(2, 4)
+        self.assertEqual(route[0].get(4), 1.5)
         route1 = gr.shortest_path(0, 2)
         self.assertEqual(route1[0].get(2), 7.8)
         route2 = gr.shortest_path(2, 6)
-        self.assertAlmostEqual(route2[0].get(6),12.9)
-
+        self.assertAlmostEqual(route2[0].get(6), 12.9)
 
     def test_centerPoint(self):
         g = DiGraph()
@@ -101,8 +101,22 @@ class MyTestCase(unittest.TestCase):
         gr = GraphAlgo(g)
         self.assertEqual(gr.centerPoint()[0], 0)
 
-
-
+    def test_TSP(self):
+        g = DiGraph()
+        g = self.generate()
+        gr = GraphAlgo(g)
+        check = [0, 2, 4, 6, 8]
+        check2 = [0, 3, 7]
+        ans = [0, 8, 9, 1, 2, 3, 4, 5, 6]
+        ans2 = [0, 7, 8, 9, 1, 2, 3]
+        check3 = [0, 5, 4]
+        ans3 = [0, 5, 0, 4]
+        test = gr.TSP(check)
+        test2 = gr.TSP(check2)
+        test3 = gr.TSP(check3)
+        self.assertEqual(test[0], ans)
+        self.assertEqual(test2[0], ans2)
+        self.assertEqual(test3[0], ans3)
 
 
 if __name__ == '__main__':
